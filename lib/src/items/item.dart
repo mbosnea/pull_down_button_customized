@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 import '../../pull_down_button.dart';
 import '../_internals/animation.dart';
@@ -8,16 +9,15 @@ import '../_internals/item_layout.dart';
 import '../_internals/menu_config.dart';
 import '../_internals/route.dart';
 
-const double _kItemVerticalPadding = 11;
-const double _kItemStartPadding = 16;
+const double _kItemVerticalPadding = 0;
+const double _kItemStartPadding = 8;
 const double _kItemWithLeadingStartPadding = 9;
-const double _kItemEndPadding = 16;
+const double _kItemEndPadding = 8;
 // This value is present in layout guidelines but is not used anywhere right
 // now. Have it here already to not forget about it later.
 // const double _kItemWithTrailingEndPadding = 6;
 
-EdgeInsetsDirectional _itemPadding({required bool hasLeading}) =>
-    EdgeInsetsDirectional.only(
+EdgeInsetsDirectional _itemPadding({required bool hasLeading}) => EdgeInsetsDirectional.only(
       start: hasLeading ? _kItemWithLeadingStartPadding : _kItemStartPadding,
       end: _kItemEndPadding,
       top: _kItemVerticalPadding,
@@ -66,6 +66,8 @@ class PullDownMenuItem extends StatelessWidget implements PullDownMenuEntry {
     this.iconColor,
     this.iconWidget,
     this.isDestructive = false,
+    this.trailingWidget,
+    this.backgroundColor,
   })  : selected = null,
         assert(
           icon == null || iconWidget == null,
@@ -88,6 +90,8 @@ class PullDownMenuItem extends StatelessWidget implements PullDownMenuEntry {
     this.iconWidget,
     this.isDestructive = false,
     this.selected = false,
+    this.trailingWidget,
+    this.backgroundColor,
   }) : assert(
           icon == null || iconWidget == null,
           'Please provide either icon or iconWidget',
@@ -173,6 +177,10 @@ class PullDownMenuItem extends StatelessWidget implements PullDownMenuEntry {
   /// are used.
   final bool? selected;
 
+  final Widget? trailingWidget;
+
+  final Color? backgroundColor;
+
   /// Default tap handler for [PullDownMenuItem].
   ///
   /// The behavior is to pop the menu and then call the [onTap].
@@ -230,9 +238,7 @@ class PullDownMenuItem extends StatelessWidget implements PullDownMenuEntry {
     assert(
       () {
         return switch (size) {
-          ElementSize.small ||
-          ElementSize.medium =>
-            icon != null || iconWidget != null,
+          ElementSize.small || ElementSize.medium => icon != null || iconWidget != null,
           ElementSize.large => true
         };
       }(),
@@ -282,6 +288,7 @@ class PullDownMenuItem extends StatelessWidget implements PullDownMenuEntry {
           iconColor: iconColor,
           enabled: isEnabled,
           destructive: isDestructive,
+          trailingWidget: trailingWidget,
           // Don't do unnecessary checks from inherited widget if [selected] is
           // not null.
           leading: selected != null || MenuConfig.of(context)
@@ -302,11 +309,14 @@ class PullDownMenuItem extends StatelessWidget implements PullDownMenuEntry {
         enabled: enabled,
         button: true,
         selected: selected,
-        child: MenuActionButton(
-          onTap: enabled ? () => tapHandler(context, onTap) : null,
-          pressedColor: theme.onPressedBackgroundColor!,
-          hoverColor: theme.onHoverBackgroundColor!,
-          child: child,
+        child: Container(
+          color: backgroundColor,
+          child: MenuActionButton(
+            onTap: enabled ? () => tapHandler(context, onTap) : null,
+            pressedColor: theme.onPressedBackgroundColor!,
+            hoverColor: theme.onHoverBackgroundColor!,
+            child: child,
+          ),
         ),
       ),
     );
@@ -443,6 +453,7 @@ class _LargeItem extends StatelessWidget {
     required this.enabled,
     required this.destructive,
     required this.leading,
+    required this.trailingWidget,
     required this.title,
     required this.titleStyle,
     required this.subtitle,
@@ -451,6 +462,7 @@ class _LargeItem extends StatelessWidget {
 
   final IconData? icon;
   final Widget? iconWidget;
+  final Widget? trailingWidget;
   final Color destructiveColor;
   final Color onHoverColor;
   final Color? iconColor;
@@ -466,9 +478,7 @@ class _LargeItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final isHovered = MenuActionButtonState.of(context);
 
-    final minHeight = subtitle != null
-        ? ElementSize.resolveLargeWithSubtitle(context)
-        : ElementSize.resolveLarge(context);
+    final minHeight = ElementSize.resolveLargeWithSubtitle(context);
 
     final isInAccessibilityMode = TextUtils.isInAccessibilityMode(context);
     final maxLines = isInAccessibilityMode ? 3 : 2;
@@ -523,27 +533,28 @@ class _LargeItem extends StatelessWidget {
       );
     }
 
-    final hasIcon =
-        !isInAccessibilityMode && (icon != null || iconWidget != null);
+    final hasIcon = !isInAccessibilityMode && (icon != null || iconWidget != null);
     final hasLeading = leading != null;
 
     if (hasLeading || hasIcon) {
       body = Row(
         children: [
+          if (hasIcon)
+            Padding(
+              padding: EdgeInsetsDirectional.zero,
+              child: IconBox(
+                color: resolvedColor,
+                child: iconWidget ?? Icon(icon),
+              ),
+            ),
+          const SizedBox(width: 5),
           if (hasLeading)
             DefaultTextStyle(
               style: TextStyle(color: resolvedStyle.color),
               child: leading!,
             ),
           Expanded(child: body),
-          if (hasIcon)
-            Padding(
-              padding: const EdgeInsetsDirectional.only(start: 8),
-              child: IconBox(
-                color: resolvedColor,
-                child: iconWidget ?? Icon(icon),
-              ),
-            ),
+          if (trailingWidget != null) trailingWidget!,
         ],
       );
     }

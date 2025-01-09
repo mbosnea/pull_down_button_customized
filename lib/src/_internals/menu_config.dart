@@ -66,8 +66,7 @@ enum ElementSize {
   /// Returned value is always 1.45 times bigger than [resolveLarge].
   ///
   /// Base is 64px.
-  static double resolveLargeWithSubtitle(BuildContext context) =>
-      (resolveLarge(context) * 1.45).ceilToDouble();
+  static double resolveLargeWithSubtitle(BuildContext context) => (resolveLarge(context) * 1).ceilToDouble();
 
   /// Minimum allowed height for [ElementSize.medium].
   ///
@@ -79,8 +78,7 @@ enum ElementSize {
   /// Returned value is always 1.36 times bigger than [resolveLarge].
   ///
   /// Base is 60px.
-  static double resolveMedium(BuildContext context) =>
-      (resolveLarge(context) * 1.36).ceilToDouble();
+  static double resolveMedium(BuildContext context) => (resolveLarge(context) * 1.36).ceilToDouble();
 }
 
 /// An inherited widget used to indicate current [ElementSize] configuration.
@@ -105,14 +103,10 @@ class ActionsRowSizeConfig extends InheritedWidget {
   ///
   /// If there is no ancestor, it returns [ElementSize.large].
   static ElementSize of(BuildContext context) =>
-      context
-          .dependOnInheritedWidgetOfExactType<ActionsRowSizeConfig>()
-          ?.size ??
-      ElementSize.large;
+      context.dependOnInheritedWidgetOfExactType<ActionsRowSizeConfig>()?.size ?? ElementSize.large;
 
   @override
-  bool updateShouldNotify(ActionsRowSizeConfig oldWidget) =>
-      size != oldWidget.size;
+  bool updateShouldNotify(ActionsRowSizeConfig oldWidget) => size != oldWidget.size;
 }
 
 /// An inherited widget used to provide menu configuration to all its descendant
@@ -135,18 +129,15 @@ class MenuConfig extends InheritedWidget {
   final bool hasLeading;
 
   /// Used to determine if the menu has any items with a leading widget.
-  static bool menuHasLeading(List<PullDownMenuEntry> items) =>
-      items.whereType<PullDownMenuItem>().any(
-            (element) => element.selected != null,
-          );
+  static bool menuHasLeading(List<PullDownMenuEntry> items) => items.whereType<PullDownMenuItem>().any(
+        (element) => element.selected != null,
+      );
 
   /// Returns a [bool] value indicating whether menu has any
   /// [PullDownMenuItem]s  with leading widget from the closest [MenuConfig]
   /// ancestor.
-  static bool of(BuildContext context) =>
-      context.dependOnInheritedWidgetOfExactType<MenuConfig>()!.hasLeading;
+  static bool of(BuildContext context) => context.dependOnInheritedWidgetOfExactType<MenuConfig>()!.hasLeading;
 
   @override
-  bool updateShouldNotify(MenuConfig oldWidget) =>
-      hasLeading != oldWidget.hasLeading;
+  bool updateShouldNotify(MenuConfig oldWidget) => hasLeading != oldWidget.hasLeading;
 }

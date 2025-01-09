@@ -46,8 +46,7 @@ class PullDownMenuDivider extends StatelessWidget implements PullDownMenuEntry {
   ///
   /// Can be 0 pixels ([PullDownMenuDivider]) or 8 pixels
   /// ([PullDownMenuDivider.large]) depending on the constructor.
-  double get height =>
-      _isLarge ? _kMenuLargeDividerHeight : _kMenuDividerHeight;
+  double get height => _isLarge ? _kMenuLargeDividerHeight : _kMenuDividerHeight;
 
   /// Helper method that simplifies separation of pull-down menu items.
   @Deprecated(
@@ -64,8 +63,7 @@ class PullDownMenuDivider extends StatelessWidget implements PullDownMenuEntry {
   Widget build(BuildContext context) {
     final theme = PullDownMenuDividerTheme.resolve(context);
 
-    final divider =
-        color ?? (_isLarge ? theme.largeDividerColor : theme.dividerColor)!;
+    final divider = color ?? (_isLarge ? theme.dividerColor : theme.dividerColor)!;
 
     return Divider(
       height: height,
@@ -148,9 +146,10 @@ class MenuSeparator extends StatelessWidget implements PullDownMenuEntry {
     switch (axis) {
       case Axis.horizontal:
         return Divider(
+          indent: 30,
           height: _kMenuDividerHeight,
           thickness: _kMenuDividerHeight,
-          color: theme.dividerColor,
+          color: Colors.black,
         );
       case Axis.vertical:
         return VerticalDivider(

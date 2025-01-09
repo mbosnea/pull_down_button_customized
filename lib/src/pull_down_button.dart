@@ -372,7 +372,7 @@ class PullDownButton extends StatefulWidget {
     return AnimatedOpacity(
       opacity: isOpen ? 0.4 : 1,
       duration: Duration(milliseconds: isOpen ? 100 : 200),
-      curve: isOpen ? Curves.fastLinearToSlowEaseIn : Curves.easeIn,
+      curve: isOpen ? Curves.easeInExpo : Curves.easeOutExpo,
       child: child,
     );
   }
@@ -397,8 +397,8 @@ class _PullDownButtonState extends State<PullDownButton> {
       button = _anchorToButtonPart(context, button, widget.buttonAnchor!);
     }
 
-    final animationAlignment = widget.animationAlignmentOverride ??
-        PullDownMenuRoute.animationAlignment(context, button);
+    final animationAlignment =
+        widget.animationAlignmentOverride ?? PullDownMenuRoute.animationAlignment(context, button);
 
     final items = widget.itemBuilder(context);
 
@@ -438,8 +438,7 @@ class _PullDownButtonState extends State<PullDownButton> {
   Widget build(BuildContext context) {
     final buttonBuilder = widget.buttonBuilder(context, showButtonMenu);
 
-    return widget.animationBuilder?.call(context, state, buttonBuilder) ??
-        buttonBuilder;
+    return widget.animationBuilder?.call(context, state, buttonBuilder) ?? buttonBuilder;
   }
 }
 
@@ -585,12 +584,10 @@ Rect _anchorToButtonPart(
   final textDirection = Directionality.of(context);
 
   final side = switch (anchor) {
-    PullDownMenuAnchor.start when textDirection == TextDirection.ltr =>
-      buttonRect.left,
+    PullDownMenuAnchor.start when textDirection == TextDirection.ltr => buttonRect.left,
     PullDownMenuAnchor.start => buttonRect.right,
     PullDownMenuAnchor.center => buttonRect.center.dx,
-    PullDownMenuAnchor.end when textDirection == TextDirection.ltr =>
-      buttonRect.right,
+    PullDownMenuAnchor.end when textDirection == TextDirection.ltr => buttonRect.right,
     PullDownMenuAnchor.end => buttonRect.left,
   };
 
@@ -606,13 +603,11 @@ Rect _anchorToButtonPart(
 String _barrierLabel(BuildContext context) {
   // Use this instead of `MaterialLocalizations.of(context)` because
   // [MaterialLocalizations] might be null in some cases.
-  final materialLocalizations =
-      Localizations.of<MaterialLocalizations>(context, MaterialLocalizations);
+  final materialLocalizations = Localizations.of<MaterialLocalizations>(context, MaterialLocalizations);
 
   // Use this instead of `CupertinoLocalizations.of(context)` because
   // [CupertinoLocalizations] might be null in some cases.
-  final cupertinoLocalizations =
-      Localizations.of<CupertinoLocalizations>(context, CupertinoLocalizations);
+  final cupertinoLocalizations = Localizations.of<CupertinoLocalizations>(context, CupertinoLocalizations);
 
   // If both localizations are null, fallback to
   // [DefaultMaterialLocalizations().modalBarrierDismissLabel].

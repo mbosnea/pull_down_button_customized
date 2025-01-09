@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
 import '../../pull_down_button.dart';
@@ -41,8 +42,7 @@ class RoutePullDownMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme =
-        PullDownMenuRouteTheme.resolve(context, routeTheme: routeTheme);
+    final theme = PullDownMenuRouteTheme.resolve(context, routeTheme: routeTheme);
 
     final shadowTween = DecorationTween(
       begin: BoxDecoration(
@@ -65,9 +65,7 @@ class RoutePullDownMenu extends StatelessWidget {
       scale: animation,
       alignment: alignment,
       child: DecoratedBoxTransition(
-        decoration: AnimationUtils.shadowTween
-            .animate(clampedAnimation)
-            .drive(shadowTween),
+        decoration: AnimationUtils.shadowTween.animate(clampedAnimation).drive(shadowTween),
         child: FadeTransition(
           opacity: clampedAnimation,
           child: MenuDecoration(
@@ -77,9 +75,7 @@ class RoutePullDownMenu extends StatelessWidget {
               opacity: clampedAnimation,
               child: AnimatedMenuContainer(
                 constraints: BoxConstraints.tightFor(
-                  width: isInAccessibilityMode
-                      ? theme.accessibilityWidth
-                      : theme.width,
+                  width: isInAccessibilityMode ? theme.accessibilityWidth : theme.width,
                 ),
                 child: SizeTransition(
                   axisAlignment: -1,

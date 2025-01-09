@@ -46,8 +46,7 @@ class _MenuActionButtonState extends State<MenuActionButton> {
 
   late final enabled = widget.onTap != null;
 
-  Offset get _currentPosition =>
-      context.currentRenderBox.localToGlobal(Offset.zero);
+  Offset get _currentPosition => context.currentRenderBox.localToGlobal(Offset.zero);
 
   Size get _currentSize => context.currentRenderBox.size;
 
@@ -163,11 +162,9 @@ class MenuActionButtonState extends InheritedWidget {
 
   /// Returns the current hover state from the closest [MenuActionButtonState]
   /// ancestor.
-  static bool of(BuildContext context) => context
-      .dependOnInheritedWidgetOfExactType<MenuActionButtonState>()!
-      .isHovered;
+  static bool of(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<MenuActionButtonState>()!.isHovered;
 
   @override
-  bool updateShouldNotify(MenuActionButtonState oldWidget) =>
-      isHovered != oldWidget.isHovered;
+  bool updateShouldNotify(MenuActionButtonState oldWidget) => isHovered != oldWidget.isHovered;
 }
