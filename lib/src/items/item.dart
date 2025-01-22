@@ -534,7 +534,7 @@ class _LargeItem extends StatelessWidget {
     }
 
     final hasIcon = !isInAccessibilityMode && (icon != null || iconWidget != null);
-    final hasLeading = leading != null;
+    final hasLeading = trailingWidget != null;
 
     if (hasLeading || hasIcon) {
       body = Row(
